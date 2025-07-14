@@ -5,14 +5,13 @@ class NewsboardHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 160,
-      child: Center(
-        child: Image.asset(
-          'assets/images/newsboard-logo.png',
-          height: 160,
-          fit: BoxFit.contain,
-        ),
+    Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.only(top: 24, bottom: 8),
+      child: Image.asset(
+        'assets/images/newsboard-logo.png',
+        height: 48, 
+        fit: BoxFit.contain,
       ),
     );
   }

@@ -1,22 +1,75 @@
 import 'package:flutter/material.dart';
-import '../widgets/newsboard_header.dart';
+import '../widgets/bottom_nav_bar.dart';
+import '../widgets/category_tab_bar.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int _selectedIndex = 0;
+  int _selectedCategory = 0;
+
+  final List<String> _categories = [
+    'Trending',
+    'Health',
+    'Sports',
+    'Finance',
+    'Technology',
+    'World',
+    'Politics',
+    'Entertainment',
+    'Science',
+    'Travel',
+    'Food',
+    'Opinion',
+    'Culture',
+    'Business',
+    'Education',
+  ];
+
+  @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        title: Image.asset(
+          'assets/images/newsboard-logo.png',
+          height: 160,
+          fit: BoxFit.contain,
+        ),
+      ),
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          NewsboardHeader(),
-          Expanded(
+          CategoryTabBar(
+            categories: _categories,
+            selectedIndex: _selectedCategory,
+            onTap: (index) {
+              setState(() {
+                _selectedCategory = index;
+              });
+            },
+          ),
+          const Expanded(
             child: Center(
               child: Text('Welcome to newsboard!'),
             ),
           ),
         ],
+      ),
+      bottomNavigationBar: BottomNavBar(
+        currentIndex: _selectedIndex,
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
       ),
     );
   }
