@@ -15,14 +15,14 @@ class BottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final items = [
-      CupertinoIcons.house_alt,
+      CupertinoIcons.globe,
       CupertinoIcons.news,
       CupertinoIcons.search_circle,
       CupertinoIcons.heart,
       CupertinoIcons.person,
     ];
     final filledItems = [
-      CupertinoIcons.house_alt_fill,
+      CupertinoIcons.globe,
       CupertinoIcons.news_solid,
       CupertinoIcons.search_circle_fill,
       CupertinoIcons.heart_fill,

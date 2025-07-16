@@ -34,7 +34,7 @@ class CategoryTabBar extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     )
                   : theme.textTheme.titleMedium?.copyWith(
-                        color: theme.colorScheme.onSurface.withAlpha(153),
+                      color: theme.colorScheme.onSurface.withAlpha(153),
                       fontWeight: FontWeight.normal,
                     ),
             ),

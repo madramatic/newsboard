@@ -14,7 +14,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedCategory = 0;
 
   final List<String> _categories = [
-    'Trending',
+    'Latest',
     'Health',
     'Sports',
     'Finance',
@@ -39,7 +39,9 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 0,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         title: Image.asset(
-          'assets/images/newsboard-logo.png',
+          Theme.of(context).brightness == Brightness.dark
+              ? 'assets/images/newsboard-logo-dark.png'
+              : 'assets/images/newsboard-logo-light.png',
           height: 160,
           fit: BoxFit.contain,
         ),
