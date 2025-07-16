@@ -6,7 +6,7 @@ class GetLatestNews {
 
   GetLatestNews(this.repository);
 
-  Future<List<News>> call() async {
-    return await repository.getLatestNews();
+  Future<List<News>> call({String? query}) async {
+    return await repository.getLatestNews(query: query);
   }
 }

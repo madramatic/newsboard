@@ -8,7 +8,7 @@ class NewsRepositoryImpl implements NewsRepository {
   NewsRepositoryImpl(this.datasource);
 
   @override
-  Future<List<News>> getLatestNews() async {
-    return await datasource.fetchLatestNews();
+  Future<List<News>> getLatestNews({String? query}) async {
+    return await datasource.fetchLatestNews(query: query);
   }
 }

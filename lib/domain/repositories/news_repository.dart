@@ -1,5 +1,5 @@
 import '../entities/news.dart';
 
 abstract class NewsRepository {
-  Future<List<News>> getLatestNews();
+  Future<List<News>> getLatestNews({String? query});
 }

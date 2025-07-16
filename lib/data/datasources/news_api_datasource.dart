@@ -7,10 +7,14 @@ class NewsApiDatasource {
 
   NewsApiDatasource({required this.dio, required this.apiKey});
 
-  Future<List<NewsModel>> fetchLatestNews() async {
+  Future<List<NewsModel>> fetchLatestNews({String? query}) async {
     final response = await dio.get(
       'https://newsdata.io/api/1/latest',
-      queryParameters: {'apikey': apiKey, 'language': 'en'},
+      queryParameters: {
+        'apikey': apiKey,
+        'language': 'en',
+        if (query != null && query.isNotEmpty) 'q': query,
+      },
     );
     final data = response.data;
     if (data['status'] == 'success' && data['results'] is List) {

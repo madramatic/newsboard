@@ -5,7 +5,7 @@ import '../../data/repositories/news_repository_impl.dart';
 import '../../domain/usecases/get_latest_news.dart';
 import '../../domain/entities/news.dart';
 
-const apiKey = 'YOUR_API_KEY';
+const apiKey = 'pub_145a3186ca7c47639740b023e5ab7fe1';
 
 final dioProvider = Provider<Dio>((ref) => Dio());
 
@@ -24,7 +24,10 @@ final getLatestNewsProvider = Provider<GetLatestNews>((ref) {
   return GetLatestNews(repository);
 });
 
-final newsListProvider = FutureProvider<List<News>>((ref) async {
+final newsListProvider =
+    FutureProvider.family<List<News>, String>((ref, category) async {
   final getLatestNews = ref.watch(getLatestNewsProvider);
-  return await getLatestNews.call();
+  // If category is 'Latest', pass empty string to get all news
+  final query = category == 'Latest' ? '' : category;
+  return await getLatestNews.call(query: query);
 });

@@ -36,7 +36,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final newsAsync = ref.watch(newsListProvider);
+    final newsAsync =
+        ref.watch(newsListProvider(_categories[_selectedCategory]));
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
