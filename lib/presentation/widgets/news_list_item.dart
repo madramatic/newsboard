@@ -47,6 +47,14 @@ class NewsListItem extends StatelessWidget {
                           width: 120,
                           height: 80,
                           fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) =>
+                              Container(
+                            width: 120,
+                            height: 80,
+                            color: theme.colorScheme.surfaceContainerHighest,
+                            child: Icon(Icons.broken_image,
+                                color: theme.colorScheme.onSurfaceVariant),
+                          ),
                         ),
                         const SizedBox(width: 16),
                       ],
