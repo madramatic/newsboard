@@ -37,6 +37,15 @@ class NewsDetailsScreen extends StatelessWidget {
                   width: double.infinity,
                   height: 200,
                   fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) => Container(
+                    width: double.infinity,
+                    height: 200,
+                    color:
+                        Theme.of(context).colorScheme.surfaceContainerHighest,
+                    child: Icon(Icons.broken_image,
+                        size: 48,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant),
+                  ),
                 ),
               ),
             const SizedBox(height: 20),
