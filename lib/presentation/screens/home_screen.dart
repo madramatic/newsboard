@@ -75,43 +75,50 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 if (newsState.articles.isEmpty && !newsState.isLoadingInitial) {
                   return const Center(child: Text('No news available.'));
                 }
-                return NotificationListener<ScrollNotification>(
-                  onNotification: (scrollInfo) {
-                    if (scrollInfo.metrics.pixels >=
-                            scrollInfo.metrics.maxScrollExtent - 200 &&
-                        !newsState.isLoadingMore &&
-                        !newsState.isAllLoaded) {
-                      notifier.loadMore();
-                    }
-                    return false;
+                return RefreshIndicator(
+                  color: Theme.of(context).colorScheme.primary,
+                  backgroundColor: Theme.of(context).colorScheme.surface,
+                  onRefresh: () async {
+                    await notifier.loadInitial();
                   },
-                  child: ListView.builder(
-                    itemCount: newsState.articles.length + 1,
-                    itemBuilder: (context, index) {
-                      if (index < newsState.articles.length) {
-                        final news = newsState.articles[index];
-                        return NewsListItem(
-                          news: news,
-                          onTap: () {
-                            context.push('/details', extra: news);
-                          },
-                        );
-                      } else {
-                        if (newsState.isLoadingMore) {
-                          return const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 16),
-                            child: Center(child: CircularProgressIndicator()),
-                          );
-                        } else if (newsState.isAllLoaded) {
-                          return const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 16),
-                            child: Center(child: Text('All caught up.')),
+                  child: NotificationListener<ScrollNotification>(
+                    onNotification: (scrollInfo) {
+                      if (scrollInfo.metrics.pixels >=
+                              scrollInfo.metrics.maxScrollExtent - 200 &&
+                          !newsState.isLoadingMore &&
+                          !newsState.isAllLoaded) {
+                        notifier.loadMore();
+                      }
+                      return false;
+                    },
+                    child: ListView.builder(
+                      itemCount: newsState.articles.length + 1,
+                      itemBuilder: (context, index) {
+                        if (index < newsState.articles.length) {
+                          final news = newsState.articles[index];
+                          return NewsListItem(
+                            news: news,
+                            onTap: () {
+                              context.push('/details', extra: news);
+                            },
                           );
                         } else {
-                          return const SizedBox.shrink();
+                          if (newsState.isLoadingMore) {
+                            return const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 16),
+                              child: Center(child: CircularProgressIndicator()),
+                            );
+                          } else if (newsState.isAllLoaded) {
+                            return const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 16),
+                              child: Center(child: Text('All caught up.')),
+                            );
+                          } else {
+                            return const SizedBox.shrink();
+                          }
                         }
-                      }
-                    },
+                      },
+                    ),
                   ),
                 );
               },
