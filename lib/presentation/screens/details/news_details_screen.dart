@@ -9,7 +9,14 @@ class NewsDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(news.sourceName),
+        title: Text(
+          news.sourceName,
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontFamily: 'PlayfairDisplay',
+                fontWeight: FontWeight.normal,
+                fontSize: 28,
+              ),
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -21,7 +28,7 @@ class NewsDetailsScreen extends StatelessWidget {
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontFamily: 'PlayfairDisplay',
                     fontWeight: FontWeight.bold,
-                    fontSize: 28,
+                    fontSize: 36,
                   ),
             ),
             const SizedBox(height: 8),
