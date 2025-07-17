@@ -4,6 +4,7 @@ import '../widgets/bottom_nav_bar.dart';
 import '../widgets/category_tab_bar.dart';
 import '../providers/news_provider.dart';
 import 'package:go_router/go_router.dart';
+import '../widgets/news_list_item.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -73,56 +74,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   itemCount: newsList.length,
                   itemBuilder: (context, index) {
                     final news = newsList[index];
-                    return InkWell(
+                    return NewsListItem(
+                      news: news,
                       onTap: () {
                         context.push('/details', extra: news);
                       },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 8, horizontal: 16),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            if (news.imageUrl != null)
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: Image.network(
-                                  news.imageUrl!,
-                                  width: 100,
-                                  height: 80,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    news.title,
-                                    style:
-                                        Theme.of(context).textTheme.titleMedium,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Text(
-                                    news.sourceName,
-                                    style:
-                                        Theme.of(context).textTheme.bodySmall,
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    news.pubDate,
-                                    style:
-                                        Theme.of(context).textTheme.bodySmall,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
                     );
                   },
                 );

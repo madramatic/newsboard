@@ -16,47 +16,74 @@ class NewsDetailsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (news.imageUrl != null)
-              Center(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.network(
-                    news.imageUrl!,
-                    width: double.infinity,
-                    height: 200,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-            const SizedBox(height: 16),
             Text(
               news.title,
-              style: Theme.of(context).textTheme.headlineSmall,
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontFamily: 'PlayfairDisplay',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 28,
+                  ),
             ),
             const SizedBox(height: 8),
             Text(
               news.pubDate,
               style: Theme.of(context).textTheme.bodySmall,
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 16),
+            if (news.imageUrl != null)
+              Center(
+                child: Image.network(
+                  news.imageUrl!,
+                  width: double.infinity,
+                  height: 200,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            const SizedBox(height: 20),
             if (news.description != null)
               Text(
                 news.description!,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
             const SizedBox(height: 16),
-            Text('Source: ${news.sourceName}'),
-            Text('Language: ${news.language}'),
-            Text('Country: ${news.country.join(", ")}'),
-            Text('Category: ${news.category.join(", ")}'),
-            const SizedBox(height: 16),
-            if (news.link.isNotEmpty)
-              TextButton(
-                onPressed: () {
-                  // TODO: Implement launch URL
-                },
-                child: const Text('Read full article'),
+            RichText(
+              text: TextSpan(
+                text: 'Source: ',
+                style: const TextStyle(
+                  fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.normal,
+                  color: Colors.black,
+                ),
+                children: [
+                  TextSpan(
+                    text: news.sourceName,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
               ),
+            ),
+            RichText(
+              text: TextSpan(
+                text: 'Country: ',
+                style: const TextStyle(
+                  fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.normal,
+                  color: Colors.black,
+                ),
+                children: [
+                  TextSpan(
+                    text: news.country.join(", "),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
