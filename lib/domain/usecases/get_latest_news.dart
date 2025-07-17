@@ -1,4 +1,3 @@
-import '../entities/news.dart';
 import '../repositories/news_repository.dart';
 
 class GetLatestNews {
@@ -6,7 +5,7 @@ class GetLatestNews {
 
   GetLatestNews(this.repository);
 
-  Future<List<News>> call({String? query}) async {
-    return await repository.getLatestNews(query: query);
+  Future<NewsPage> call({String? query, String? page}) async {
+    return await repository.getLatestNews(query: query, page: page);
   }
 }
