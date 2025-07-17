@@ -37,8 +37,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final newsAsync =
+    final newsState =
         ref.watch(newsListProvider(_categories[_selectedCategory]));
+    final notifier =
+        ref.read(newsListProvider(_categories[_selectedCategory]).notifier);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -65,26 +67,54 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             },
           ),
           Expanded(
-            child: newsAsync.when(
-              data: (newsList) {
-                if (newsList.isEmpty) {
+            child: Builder(
+              builder: (context) {
+                if (newsState.isLoadingInitial) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if (newsState.articles.isEmpty && !newsState.isLoadingInitial) {
                   return const Center(child: Text('No news available.'));
                 }
-                return ListView.builder(
-                  itemCount: newsList.length,
-                  itemBuilder: (context, index) {
-                    final news = newsList[index];
-                    return NewsListItem(
-                      news: news,
-                      onTap: () {
-                        context.push('/details', extra: news);
-                      },
-                    );
+                return NotificationListener<ScrollNotification>(
+                  onNotification: (scrollInfo) {
+                    if (scrollInfo.metrics.pixels >=
+                            scrollInfo.metrics.maxScrollExtent - 200 &&
+                        !newsState.isLoadingMore &&
+                        !newsState.isAllLoaded) {
+                      notifier.loadMore();
+                    }
+                    return false;
                   },
+                  child: ListView.builder(
+                    itemCount: newsState.articles.length + 1,
+                    itemBuilder: (context, index) {
+                      if (index < newsState.articles.length) {
+                        final news = newsState.articles[index];
+                        return NewsListItem(
+                          news: news,
+                          onTap: () {
+                            context.push('/details', extra: news);
+                          },
+                        );
+                      } else {
+                        if (newsState.isLoadingMore) {
+                          return const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16),
+                            child: Center(child: CircularProgressIndicator()),
+                          );
+                        } else if (newsState.isAllLoaded) {
+                          return const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16),
+                            child: Center(child: Text('All caught up.')),
+                          );
+                        } else {
+                          return const SizedBox.shrink();
+                        }
+                      }
+                    },
+                  ),
                 );
               },
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (e, _) => Center(child: Text('Error: $e')),
             ),
           ),
         ],
