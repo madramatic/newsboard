@@ -9,7 +9,6 @@ class NewsDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final topPadding = MediaQuery.of(context).padding.top;
     DateTime? publishedAt;
     try {
       publishedAt = DateTime.parse(news.pubDate);
@@ -22,7 +21,6 @@ class NewsDetailsScreen extends StatelessWidget {
       backgroundColor: theme.scaffoldBackgroundColor,
       body: Stack(
         children: [
-          // Top image background
           SizedBox(
             width: double.infinity,
             height: 340,
@@ -53,44 +51,9 @@ class NewsDetailsScreen extends StatelessWidget {
                     ),
                   ),
           ),
-          // Top overlays (back, bookmark, share)
-          Positioned(
-            top: topPadding + 16,
-            left: 24,
-            child: CircleAvatar(
-              backgroundColor:
-                  theme.colorScheme.surface.withAlpha((0.85 * 255).toInt()),
-              child: IconButton(
-                icon:
-                    Icon(Icons.arrow_back, color: theme.colorScheme.onSurface),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ),
-          ),
-          Positioned(
-            top: topPadding + 16,
-            right: 24,
-            child: Row(
-              children: [
-                CircleAvatar(
-                  backgroundColor:
-                      theme.colorScheme.surface.withAlpha((0.85 * 255).toInt()),
-                  child: Icon(Icons.bookmark_border,
-                      color: theme.colorScheme.onSurface),
-                ),
-                const SizedBox(width: 12),
-                CircleAvatar(
-                  backgroundColor:
-                      theme.colorScheme.surface.withAlpha((0.85 * 255).toInt()),
-                  child: Icon(Icons.share, color: theme.colorScheme.onSurface),
-                ),
-              ],
-            ),
-          ),
-          // Main content
           Column(
             children: [
-              const SizedBox(height: 300), // Height of the image (with overlap)
+              const SizedBox(height: 260),
               Expanded(
                 child: Container(
                   width: double.infinity,
@@ -110,11 +73,43 @@ class NewsDetailsScreen extends StatelessWidget {
                     ],
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 36, 20, 24),
+                    padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
                     child: SingleChildScrollView(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              CircleAvatar(
+                                backgroundColor: theme.colorScheme.surface
+                                    .withAlpha((0.85 * 255).toInt()),
+                                child: IconButton(
+                                  icon: Icon(Icons.arrow_back,
+                                      color: theme.colorScheme.onSurface),
+                                  onPressed: () => Navigator.of(context).pop(),
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  CircleAvatar(
+                                    backgroundColor: theme.colorScheme.surface
+                                        .withAlpha((0.85 * 255).toInt()),
+                                    child: Icon(Icons.bookmark_border,
+                                        color: theme.colorScheme.onSurface),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  CircleAvatar(
+                                    backgroundColor: theme.colorScheme.surface
+                                        .withAlpha((0.85 * 255).toInt()),
+                                    child: Icon(Icons.share,
+                                        color: theme.colorScheme.onSurface),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
                           if (news.category.isNotEmpty)
                             Container(
                               margin: const EdgeInsets.only(bottom: 12),
@@ -141,8 +136,6 @@ class NewsDetailsScreen extends StatelessWidget {
                               fontFamily: 'PlayfairDisplay',
                               fontSize: 28,
                             ),
-                            maxLines: 3,
-                            overflow: TextOverflow.ellipsis,
                           ),
                           const SizedBox(height: 8),
                           Row(
