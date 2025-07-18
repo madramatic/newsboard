@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:newsboard/presentation/constants/bottom_nav_icons.dart';
 
 class BottomNavBar extends StatelessWidget {
   final int currentIndex;
@@ -15,18 +15,16 @@ class BottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final items = [
-      CupertinoIcons.globe,
-      CupertinoIcons.news,
-      CupertinoIcons.search_circle,
-      CupertinoIcons.heart,
-      CupertinoIcons.person,
+      kHomeIcon,
+      kChatIcon,
+      kSaveIcon,
+      kUserIcon,
     ];
     final filledItems = [
-      CupertinoIcons.globe,
-      CupertinoIcons.news_solid,
-      CupertinoIcons.search_circle_fill,
-      CupertinoIcons.heart_fill,
-      CupertinoIcons.person_fill,
+      kHomeFillIcon,
+      kChatFillIcon,
+      kSaveFillIcon,
+      kUserFillIcon,
     ];
     return Container(
       decoration: BoxDecoration(
@@ -44,11 +42,16 @@ class BottomNavBar extends StatelessWidget {
         showSelectedLabels: false,
         showUnselectedLabels: false,
         items: List.generate(
-            5,
+            4,
             (i) => BottomNavigationBarItem(
-                  icon: Icon(
+                  icon: Image.asset(
                     currentIndex == i ? filledItems[i] : items[i],
-                    size: 28,
+                    width: 28,
+                    height: 28,
+                    color: currentIndex == i
+                        ? theme.colorScheme.primary
+                        : theme.colorScheme.onSurface
+                            .withAlpha((255 * 0.6).round()),
                   ),
                   label: '',
                 )),
