@@ -25,6 +25,16 @@ class NewsListItem extends StatelessWidget {
     }
   }
 
+  String? getValidImageUrl(String? url) {
+    if (url == null || url.isEmpty) return null;
+    final uri = Uri.tryParse(url);
+    if (uri == null || !(uri.isScheme('http') || uri.isScheme('https')))
+      return null;
+    // Heuristic: avoid double-encoded URLs
+    if (url.contains('thumbor') && url.contains('https%3A')) return null;
+    return url;
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -43,7 +53,7 @@ class NewsListItem extends StatelessWidget {
                     Row(
                       children: [
                         Image.network(
-                          news.imageUrl!,
+                          getValidImageUrl(news.imageUrl!)!,
                           width: 120,
                           height: 80,
                           fit: BoxFit.cover,
