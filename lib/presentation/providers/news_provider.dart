@@ -67,7 +67,7 @@ class NewsListNotifier extends StateNotifier<NewsListState> {
 
   Future<void> loadInitial() async {
     state = state.copyWith(isLoadingInitial: true);
-    final query = category == 'Latest' ? '' : category;
+    final query = category == 'Top' ? '' : category;
     const page = null;
     final result = await getLatestNews.call(query: query, page: page);
     state = state.copyWith(
@@ -83,7 +83,7 @@ class NewsListNotifier extends StateNotifier<NewsListState> {
       return;
     }
     state = state.copyWith(isLoadingMore: true);
-    final query = category == 'Latest' ? '' : category;
+    final query = category == 'Top' ? '' : category;
     final result = await getLatestNews.call(query: query, page: state.nextPage);
     state = state.copyWith(
       articles: [...state.articles, ...result.articles],
