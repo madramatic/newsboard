@@ -28,9 +28,9 @@ class NewsListItem extends StatelessWidget {
   String? getValidImageUrl(String? url) {
     if (url == null || url.isEmpty) return null;
     final uri = Uri.tryParse(url);
-    if (uri == null || !(uri.isScheme('http') || uri.isScheme('https')))
+    if (uri == null || !(uri.isScheme('http') || uri.isScheme('https'))) {
       return null;
-    // Heuristic: avoid double-encoded URLs
+    }
     if (url.contains('thumbor') && url.contains('https%3A')) return null;
     return url;
   }
