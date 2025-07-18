@@ -46,9 +46,10 @@ class MainNewsListItem extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
             child: Text(
               headline,
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontFamily: 'PlayfairDisplay',
                     fontWeight: FontWeight.bold,
-                    fontSize: 22,
+                    fontSize: 20,
                   ),
             ),
           ),

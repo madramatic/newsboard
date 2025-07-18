@@ -44,6 +44,7 @@ class NewsListItem extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Column(
           children: [
+            Divider(height: .2, thickness: .2, color: theme.dividerColor),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 0),
               child: Row(
