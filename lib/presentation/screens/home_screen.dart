@@ -6,6 +6,7 @@ import '../providers/news_provider.dart';
 import 'package:go_router/go_router.dart';
 import '../widgets/news_list_item.dart';
 import '../widgets/main_news_list_item.dart';
+import '../config/categories.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -18,23 +19,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   int _selectedIndex = 0;
   int _selectedCategory = 0;
 
-  final List<String> _categories = [
-    'Latest',
-    'Health',
-    'Sports',
-    'Finance',
-    'Technology',
-    'World',
-    'Politics',
-    'Entertainment',
-    'Science',
-    'Travel',
-    'Food',
-    'Opinion',
-    'Culture',
-    'Business',
-    'Education',
-  ];
+  // Use categories from config
+  List<String> get _categories => kNewsCategories;
 
   @override
   Widget build(BuildContext context) {
