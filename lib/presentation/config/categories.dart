@@ -1,0 +1,17 @@
+const List<String> kNewsCategories = [
+  'Top',
+  'Politics',
+  'Business',
+  'Entertainment',
+  'Technology',
+  'Sports',
+  'Health',
+  'Finance',
+  'World',
+  'Science',
+  'Travel',
+  'Food',
+  'Opinion',
+  'Culture',
+  'Education',
+];
