@@ -5,6 +5,7 @@ import '../widgets/category_tab_bar.dart';
 import '../providers/news_provider.dart';
 import 'package:go_router/go_router.dart';
 import '../widgets/news_list_item.dart';
+import '../widgets/main_news_list_item.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -96,12 +97,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       itemBuilder: (context, index) {
                         if (index < newsState.articles.length) {
                           final news = newsState.articles[index];
-                          return NewsListItem(
-                            news: news,
-                            onTap: () {
-                              context.push('/details', extra: news);
-                            },
-                          );
+                          if (index == 0) {
+                            return MainNewsListItem(
+                              imageUrl: news.imageUrl ?? '',
+                              headline: news.title,
+                              summary: news.description ?? '',
+                              onTap: () {
+                                context.push('/details', extra: news);
+                              },
+                            );
+                          } else {
+                            return NewsListItem(
+                              news: news,
+                              onTap: () {
+                                context.push('/details', extra: news);
+                              },
+                            );
+                          }
                         } else {
                           if (newsState.isLoadingMore) {
                             return const Padding(
