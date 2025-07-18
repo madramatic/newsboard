@@ -30,15 +30,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ref.read(newsListProvider(_categories[_selectedCategory]).notifier);
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        title: Image.asset(
-          Theme.of(context).brightness == Brightness.dark
-              ? 'assets/images/newsboard-logo-dark.png'
-              : 'assets/images/newsboard-logo-light.png',
-          height: 160,
-          fit: BoxFit.contain,
+        title: const Text(
+          'newsboard',
+          style: TextStyle(
+            fontFamily: 'PlayfairDisplay',
+            fontSize: 28,
+          ),
         ),
       ),
       body: Column(
