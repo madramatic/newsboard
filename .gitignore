@@ -43,3 +43,35 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Firebase
+firebase.json
+firestore.rules
+firestore.indexes.json
+storage.rules
+# Firebase platform config
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+lib/firebase_options.dart
+# Flutter build outputs
+build/
+# macOS/iOS/Windows/Linux build outputs
+macos/Flutter/ephemeral/
+macos/Flutter/Flutter.podspec
+macos/Flutter/Generated.xcconfig
+macos/Flutter/Debug.xcconfig
+macos/Flutter/Release.xcconfig
+macos/Flutter/AppFrameworkInfo.plist
+macos/Runner/GeneratedPluginRegistrant.swift
+windows/flutter/generated_plugin_registrant.cc
+windows/flutter/generated_plugins.cmake
+# Python functions
+functions/__pycache__/
+functions/venv/
+functions/*.local
+functions/.env
+# IDE and system files
+.idea/
+.vscode/
+.DS_Store
+
