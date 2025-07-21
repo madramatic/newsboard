@@ -10,6 +10,7 @@ class AppTheme {
           onSurface: Colors.black,
           primary: Colors.black,
           onPrimary: Colors.white,
+          secondary: Colors.grey,
         ),
         textTheme: const TextTheme(
           bodyMedium: TextStyle(color: Colors.black),
@@ -25,6 +26,7 @@ class AppTheme {
           onSurface: Colors.white,
           primary: Colors.white,
           onPrimary: Colors.black,
+          secondary: Colors.grey,
         ),
         textTheme: const TextTheme(
           bodyMedium: TextStyle(color: Colors.white),

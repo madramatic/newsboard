@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../widgets/bottom_nav_bar.dart';
@@ -7,6 +9,7 @@ import 'package:go_router/go_router.dart';
 import '../widgets/news_list_item.dart';
 import '../widgets/main_news_list_item.dart';
 import '../config/categories.dart';
+import '../providers/auth_provider.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -19,7 +22,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   int _selectedIndex = 0;
   int _selectedCategory = 0;
 
-  // Use categories from config
   List<String> get _categories => kNewsCategories;
 
   @override
@@ -37,6 +39,30 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             fontSize: 28,
           ),
         ),
+        actions: [
+          Builder(
+            builder: (context) => IconButton(
+              icon: const Icon(Icons.logout),
+              tooltip: 'Logout',
+              onPressed: () async {
+                await ref.read(signOutProvider).call();
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'Logged out successfully',
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface),
+                      ),
+                      backgroundColor: Theme.of(context).colorScheme.surface,
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                }
+              },
+            ),
+          ),
+        ],
       ),
       body: Column(
         mainAxisSize: MainAxisSize.min,
