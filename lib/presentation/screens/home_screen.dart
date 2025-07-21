@@ -10,6 +10,7 @@ import '../widgets/news_list_item.dart';
 import '../widgets/main_news_list_item.dart';
 import '../config/categories.dart';
 import '../providers/auth_provider.dart';
+import '../providers/user_profile_provider.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -30,14 +31,27 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ref.watch(newsListProvider(_categories[_selectedCategory]));
     final notifier =
         ref.read(newsListProvider(_categories[_selectedCategory]).notifier);
+    final userProfile = ref.watch(userProfileStateProvider);
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'newsboard',
-          style: TextStyle(
-            fontFamily: 'PlayfairDisplay',
-            fontSize: 28,
-          ),
+        title: Row(
+          children: [
+            if (userProfile != null)
+              Padding(
+                padding: const EdgeInsets.only(right: 12),
+                child: Text(
+                  '${userProfile.firstName} ${userProfile.lastName}',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+              ),
+            const Text(
+              'newsboard',
+              style: TextStyle(
+                fontFamily: 'PlayfairDisplay',
+                fontSize: 28,
+              ),
+            ),
+          ],
         ),
         actions: [
           Builder(
