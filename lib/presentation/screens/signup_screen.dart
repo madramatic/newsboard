@@ -40,7 +40,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             behavior: SnackBarBehavior.floating,
           ),
         );
-        context.go('/');
+        context.go('/info');
       }
     } catch (e) {
       setState(() {
