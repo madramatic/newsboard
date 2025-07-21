@@ -7,6 +7,7 @@ import 'presentation/screens/home_screen.dart';
 import 'presentation/screens/details/news_details_screen.dart';
 import 'presentation/screens/signin_screen.dart';
 import 'presentation/screens/signup_screen.dart';
+import 'presentation/screens/info_screen.dart';
 
 final _router = GoRouter(
   routes: [
@@ -28,6 +29,10 @@ final _router = GoRouter(
         GoRoute(
           path: 'signup',
           builder: (context, state) => const SignupScreen(),
+        ),
+        GoRoute(
+          path: 'info',
+          builder: (context, state) => const InfoScreen(),
         ),
       ],
     ),
