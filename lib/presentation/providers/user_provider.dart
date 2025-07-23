@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:newsboard/data/repositories/user_repository_impl.dart';
 import 'package:newsboard/domain/usecases/user_usecases.dart';
+import 'package:newsboard/presentation/providers/auth_provider.dart';
 import '../../data/datasources/firestore_user_datasource.dart';
 import '../../domain/entities/user.dart';
 
@@ -25,3 +26,10 @@ final getUserProvider = Provider<GetUser>((ref) {
 });
 
 final userStateProvider = StateProvider<User?>((ref) => null);
+
+final currentUserProfileProvider = FutureProvider<User?>((ref) async {
+  final authState = await ref.watch(authStateChangesProvider.future);
+  if (authState == null) return null;
+  final getUser = ref.read(getUserProvider);
+  return getUser.call(authState.id);
+});
