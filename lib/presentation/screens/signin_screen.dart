@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:newsboard/presentation/providers/user_profile_provider.dart';
+import 'package:newsboard/presentation/providers/user_provider.dart';
 import '../providers/auth_provider.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_text_form_field.dart';
@@ -29,13 +29,13 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
     });
     try {
       await ref.read(signInProvider).call(email: _email, password: _password);
-      final userProfile = ref.read(userProfileStateProvider);
+      final user = ref.read(userStateProvider);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              userProfile != null
-                  ? 'Welcome, ${userProfile.firstName} ${userProfile.lastName}!'
+              user != null
+                  ? 'Welcome, ${user.firstName} ${user.lastName}!'
                   : 'Login successful',
               style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
             ),
