@@ -1,3 +1,5 @@
+// ignore_for_file: unused_result
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:newsboard/presentation/providers/auth_provider.dart';
@@ -35,12 +37,13 @@ class _InfoScreenState extends ConsumerState<InfoScreen> {
       return;
     }
     try {
-      await ref.read(saveUserProvider).call(
-            user: user.copyWith(
-              firstName: _firstName,
-              lastName: _lastName,
-            ),
-          );
+      final updatedUser = user.copyWith(
+        firstName: _firstName,
+        lastName: _lastName,
+      );
+      await ref.read(saveUserProvider).call(user: updatedUser);
+      ref.read(userStateProvider.notifier).state = updatedUser;
+      await ref.refresh(currentUserProfileProvider.future);
       if (mounted) {
         context.go('/');
       }
