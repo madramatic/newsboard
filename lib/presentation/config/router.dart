@@ -1,6 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/auth_provider.dart';
+import '../providers/user_provider.dart';
 import '../screens/home_screen.dart';
 import '../screens/details/news_details_screen.dart';
 import '../screens/signin_screen.dart';
@@ -13,11 +13,16 @@ class AuthGate extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authState = ref.watch(authStateChangesProvider);
-    return authState.when(
-      data: (user) {
-        if (user == null) {
+    final userProfileAsync = ref.watch(currentUserProfileProvider);
+    return userProfileAsync.when(
+      data: (profile) {
+        if (profile == null) {
           return const SigninScreen();
+        } else if (profile.firstName == null ||
+            profile.firstName!.isEmpty ||
+            profile.lastName == null ||
+            profile.lastName!.isEmpty) {
+          return const InfoScreen();
         } else {
           return const HomeScreen();
         }
