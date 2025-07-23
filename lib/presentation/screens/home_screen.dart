@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:newsboard/presentation/providers/user_provider.dart';
-import '../widgets/bottom_nav_bar.dart';
 import '../widgets/category_tab_bar.dart';
 import '../providers/news_provider.dart';
 import 'package:go_router/go_router.dart';
@@ -20,7 +19,6 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  int _selectedIndex = 0;
   int _selectedCategory = 0;
 
   List<String> get _categories => kNewsCategories;
@@ -72,6 +70,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       behavior: SnackBarBehavior.floating,
                     ),
                   );
+                  context.go('/login');
                 }
               },
             ),
@@ -160,14 +159,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
           ),
         ],
-      ),
-      bottomNavigationBar: BottomNavBar(
-        currentIndex: _selectedIndex,
-        onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
       ),
     );
   }
