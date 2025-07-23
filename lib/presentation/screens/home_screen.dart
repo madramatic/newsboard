@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:newsboard/presentation/providers/user_provider.dart';
 import '../widgets/bottom_nav_bar.dart';
 import '../widgets/category_tab_bar.dart';
 import '../providers/news_provider.dart';
@@ -10,7 +11,6 @@ import '../widgets/news_list_item.dart';
 import '../widgets/main_news_list_item.dart';
 import '../config/categories.dart';
 import '../providers/auth_provider.dart';
-import '../providers/user_profile_provider.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -31,16 +31,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ref.watch(newsListProvider(_categories[_selectedCategory]));
     final notifier =
         ref.read(newsListProvider(_categories[_selectedCategory]).notifier);
-    final userProfile = ref.watch(userProfileStateProvider);
+    final user = ref.watch(userStateProvider);
     return Scaffold(
       appBar: AppBar(
         title: Row(
           children: [
-            if (userProfile != null)
+            if (user != null)
               Padding(
                 padding: const EdgeInsets.only(right: 12),
                 child: Text(
-                  '${userProfile.firstName} ${userProfile.lastName}',
+                  '${user.firstName} ${user.lastName}',
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
               ),
