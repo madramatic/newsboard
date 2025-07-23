@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:newsboard/presentation/providers/auth_provider.dart';
+import 'package:newsboard/presentation/providers/user_provider.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_text_form_field.dart';
 import 'package:go_router/go_router.dart';
-import '../providers/user_profile_provider.dart';
 
 class InfoScreen extends ConsumerStatefulWidget {
   const InfoScreen({super.key});
@@ -35,11 +35,11 @@ class _InfoScreenState extends ConsumerState<InfoScreen> {
       return;
     }
     try {
-      await ref.read(saveUserProfileProvider).call(
-            uid: user.uid,
-            firstName: _firstName,
-            lastName: _lastName,
-            email: user.email,
+      await ref.read(saveUserProvider).call(
+            user: user.copyWith(
+              firstName: _firstName,
+              lastName: _lastName,
+            ),
           );
       if (mounted) {
         context.go('/');
