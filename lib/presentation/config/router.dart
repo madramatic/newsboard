@@ -1,11 +1,11 @@
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/user_provider.dart';
-import '../screens/home_screen.dart';
 import '../screens/details/news_details_screen.dart';
 import '../screens/signin_screen.dart';
 import '../screens/signup_screen.dart';
 import '../screens/info_screen.dart';
+import '../screens/main_nav_scaffold.dart';
 import 'package:flutter/material.dart';
 
 class AuthGate extends ConsumerWidget {
@@ -24,7 +24,7 @@ class AuthGate extends ConsumerWidget {
             profile.lastName!.isEmpty) {
           return const InfoScreen();
         } else {
-          return const HomeScreen();
+          return const MainNavScaffold();
         }
       },
       loading: () =>
@@ -58,6 +58,22 @@ final router = GoRouter(
         GoRoute(
           path: 'info',
           builder: (context, state) => const InfoScreen(),
+        ),
+        GoRoute(
+          path: 'home',
+          builder: (context, state) => const MainNavScaffold(initialIndex: 0),
+        ),
+        GoRoute(
+          path: 'chat',
+          builder: (context, state) => const MainNavScaffold(initialIndex: 1),
+        ),
+        GoRoute(
+          path: 'saved',
+          builder: (context, state) => const MainNavScaffold(initialIndex: 2),
+        ),
+        GoRoute(
+          path: 'profile',
+          builder: (context, state) => const MainNavScaffold(initialIndex: 3),
         ),
       ],
     ),
