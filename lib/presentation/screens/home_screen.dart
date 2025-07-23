@@ -2,14 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:newsboard/presentation/providers/user_provider.dart';
 import '../widgets/category_tab_bar.dart';
 import '../providers/news_provider.dart';
 import 'package:go_router/go_router.dart';
 import '../widgets/news_list_item.dart';
 import '../widgets/main_news_list_item.dart';
 import '../config/categories.dart';
-import '../providers/auth_provider.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -29,53 +27,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ref.watch(newsListProvider(_categories[_selectedCategory]));
     final notifier =
         ref.read(newsListProvider(_categories[_selectedCategory]).notifier);
-    final user = ref.watch(userStateProvider);
+
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          children: [
-            if (user != null)
-              Padding(
-                padding: const EdgeInsets.only(right: 12),
-                child: Text(
-                  '${user.firstName} ${user.lastName}',
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-              ),
-            const Text(
-              'newsboard',
-              style: TextStyle(
-                fontFamily: 'PlayfairDisplay',
-                fontSize: 28,
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          Builder(
-            builder: (context) => IconButton(
-              icon: const Icon(Icons.logout),
-              tooltip: 'Logout',
-              onPressed: () async {
-                await ref.read(signOutProvider).call();
-                if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        'Logged out successfully',
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSurface),
-                      ),
-                      backgroundColor: Theme.of(context).colorScheme.surface,
-                      behavior: SnackBarBehavior.floating,
-                    ),
-                  );
-                  context.go('/login');
-                }
-              },
-            ),
+        title: const Text(
+          'newsboard',
+          style: TextStyle(
+            fontFamily: 'PlayfairDisplay',
+            fontSize: 28,
           ),
-        ],
+        ),
       ),
       body: Column(
         mainAxisSize: MainAxisSize.min,
