@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/auth_provider.dart';
+import '../providers/user_provider.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_text_form_field.dart';
 
@@ -28,7 +29,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
       _error = null;
     });
     try {
-      await ref.read(signUpProvider).call(email: _email, password: _password);
+      final user = await ref
+          .read(signUpProvider)
+          .call(email: _email, password: _password);
+      await ref.read(saveUserProvider).call(user: user);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
