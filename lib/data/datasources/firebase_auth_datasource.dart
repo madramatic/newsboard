@@ -1,37 +1,41 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import '../../domain/entities/app_user.dart';
+import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
+import '../../domain/entities/user.dart';
 
 class FirebaseAuthDatasource {
-  final FirebaseAuth _firebaseAuth;
-  FirebaseAuthDatasource({FirebaseAuth? firebaseAuth})
-      : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance;
+  final fb_auth.FirebaseAuth _firebaseAuth;
+  FirebaseAuthDatasource({fb_auth.FirebaseAuth? firebaseAuth})
+      : _firebaseAuth = firebaseAuth ?? fb_auth.FirebaseAuth.instance;
 
-  Future<AppUser> signUp(
-      {required String email, required String password}) async {
+  Future<User> signUp({required String email, required String password}) async {
     final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
       email: email,
       password: password,
     );
     final user = userCredential.user!;
-    return AppUser(uid: user.uid, email: user.email ?? '');
+    return User(
+      id: user.uid,
+      email: user.email ?? '',
+    );
   }
 
-  Future<AppUser> signIn(
-      {required String email, required String password}) async {
+  Future<User> signIn({required String email, required String password}) async {
     final userCredential = await _firebaseAuth.signInWithEmailAndPassword(
       email: email,
       password: password,
     );
     final user = userCredential.user!;
-    return AppUser(uid: user.uid, email: user.email ?? '');
+    return User(
+      id: user.uid,
+      email: user.email ?? '',
+    );
   }
 
   Future<void> signOut() async {
     await _firebaseAuth.signOut();
   }
 
-  Stream<AppUser?> get user {
+  Stream<User?> get user {
     return _firebaseAuth.authStateChanges().map((user) =>
-        user != null ? AppUser(uid: user.uid, email: user.email ?? '') : null);
+        user != null ? User(id: user.uid, email: user.email ?? '') : null);
   }
 }

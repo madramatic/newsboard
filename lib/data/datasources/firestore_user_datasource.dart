@@ -1,25 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../models/user_model.dart';
 
 class FirestoreUserDatasource {
   final FirebaseFirestore _firestore;
   FirestoreUserDatasource({FirebaseFirestore? firestore})
       : _firestore = firestore ?? FirebaseFirestore.instance;
 
-  Future<void> saveUserProfile({
-    required String uid,
-    required String firstName,
-    required String lastName,
-    required String email,
+  Future<void> saveUser({
+    required UserModel user,
   }) async {
-    await _firestore.collection('users').doc(uid).set({
-      'firstName': firstName,
-      'lastName': lastName,
-      'email': email,
-    });
+    await _firestore.collection('users').doc(user.id).set(user.toMap());
   }
 
-  Future<Map<String, dynamic>?> getUserProfile(String uid) async {
+  Future<UserModel?> getUser(String uid) async {
     final doc = await _firestore.collection('users').doc(uid).get();
-    return doc.exists ? doc.data() : null;
+    if (!doc.exists) return null;
+    final data = doc.data()!;
+    data['id'] = uid;
+    return UserModel.fromMap(data);
   }
 }

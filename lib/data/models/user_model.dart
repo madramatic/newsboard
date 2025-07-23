@@ -5,12 +5,16 @@ class UserModel {
   final String email;
   final String? displayName;
   final String? photoUrl;
+  final String? firstName;
+  final String? lastName;
 
   UserModel({
     required this.id,
     required this.email,
     this.displayName,
     this.photoUrl,
+    this.firstName,
+    this.lastName,
   });
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
@@ -19,6 +23,8 @@ class UserModel {
       email: map['email'] as String,
       displayName: map['displayName'] as String?,
       photoUrl: map['photoUrl'] as String?,
+      firstName: map['firstName'] as String?,
+      lastName: map['lastName'] as String?,
     );
   }
 
@@ -28,6 +34,8 @@ class UserModel {
       'email': email,
       'displayName': displayName,
       'photoUrl': photoUrl,
+      'firstName': firstName,
+      'lastName': lastName,
     };
   }
 
@@ -37,6 +45,8 @@ class UserModel {
       email: email,
       displayName: displayName,
       photoUrl: photoUrl,
+      firstName: firstName,
+      lastName: lastName,
     );
   }
 
@@ -46,6 +56,8 @@ class UserModel {
       email: user.email,
       displayName: user.displayName,
       photoUrl: user.photoUrl,
+      firstName: user.firstName,
+      lastName: user.lastName,
     );
   }
 }
