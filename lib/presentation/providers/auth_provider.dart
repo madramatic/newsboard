@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:newsboard/presentation/providers/user_provider.dart';
 import '../../../data/datasources/firebase_auth_datasource.dart';
 import '../../../data/repositories/auth_repository_impl.dart';
 import '../../../domain/usecases/auth_usecases.dart';
-import '../../../domain/entities/app_user.dart';
-import 'user_profile_provider.dart';
+import '../../../domain/entities/user.dart';
 
 final firebaseAuthDatasourceProvider = Provider<FirebaseAuthDatasource>((ref) {
   return FirebaseAuthDatasource();
@@ -29,16 +29,16 @@ final signOutProvider = Provider<SignOut>((ref) {
   return SignOut(repo);
 });
 
-final authStateChangesProvider = StreamProvider<AppUser?>((ref) {
+final authStateChangesProvider = StreamProvider<User?>((ref) {
   final repo = ref.watch(authRepositoryProvider);
   final stream = repo.user;
   stream.listen((user) async {
     if (user != null) {
-      final getUserProfile = ref.read(getUserProfileProvider);
-      final profile = await getUserProfile.call(user.uid);
-      ref.read(userProfileStateProvider.notifier).state = profile;
+      final getUser = ref.read(getUserProvider);
+      final profile = await getUser.call(user.id);
+      ref.read(userStateProvider.notifier).state = profile;
     } else {
-      ref.read(userProfileStateProvider.notifier).state = null;
+      ref.read(userStateProvider.notifier).state = null;
     }
   });
   return stream;
