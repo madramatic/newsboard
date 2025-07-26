@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:newsboard/presentation/providers/user_provider.dart';
 import '../providers/auth_provider.dart';
 import '../widgets/custom_button.dart';
+import '../widgets/custom_snackbar.dart';
 import '../widgets/custom_text_form_field.dart';
 
 class SigninScreen extends ConsumerStatefulWidget {
@@ -28,38 +29,27 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
       _error = null;
     });
     try {
-      await ref.read(signInProvider).call(email: _email, password: _password);
-      final user = ref.read(userStateProvider);
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              user != null
-                  ? 'Welcome, ${user.firstName} ${user.lastName}!'
-                  : 'Login successful',
-              style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
-            ),
-            backgroundColor: Theme.of(context).colorScheme.surface,
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      }
+      final userCred = await ref
+          .read(signInProvider)
+          .call(email: _email, password: _password);
+      if (!mounted) return;
+      final getUser = ref.read(getUserProvider);
+      final userProfile = await getUser.call(userCred.id);
+      if (!mounted) return;
+      final name = userProfile != null &&
+              (userProfile.firstName != null || userProfile.lastName != null)
+          ? 'Welcome ${userProfile.firstName ?? ''}${userProfile.lastName != null ? ' ${userProfile.lastName}' : ''}!'
+          : 'Welcome!';
+      CustomSnackbar.show(context, message: name);
+      await Future.delayed(const Duration(milliseconds: 500));
+      if (!mounted) return;
+      context.go('/');
     } catch (e) {
       setState(() {
         _error = 'Login failed. Please check your credentials.';
       });
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Login failed',
-              style: TextStyle(color: Theme.of(context).colorScheme.onError),
-            ),
-            backgroundColor: Theme.of(context).colorScheme.error,
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      }
+      if (!mounted) return;
+      CustomSnackbar.show(context, message: 'Login failed', isError: true);
     } finally {
       setState(() {
         _loading = false;

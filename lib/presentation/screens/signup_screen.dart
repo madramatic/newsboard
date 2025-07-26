@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../providers/auth_provider.dart';
 import '../providers/user_provider.dart';
 import '../widgets/custom_button.dart';
+import '../widgets/custom_snackbar.dart';
 import '../widgets/custom_text_form_field.dart';
 
 class SignupScreen extends ConsumerStatefulWidget {
@@ -32,36 +33,19 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
       final user = await ref
           .read(signUpProvider)
           .call(email: _email, password: _password);
+      if (!mounted) return;
       await ref.read(saveUserProvider).call(user: user);
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Signup successful',
-              style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
-            ),
-            backgroundColor: Theme.of(context).colorScheme.surface,
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-        context.go('/info');
-      }
+      if (!mounted) return;
+      CustomSnackbar.show(context, message: 'Sign up successful');
+      await Future.delayed(const Duration(milliseconds: 500));
+      if (!mounted) return;
+      context.go('/info');
     } catch (e) {
       setState(() {
         _error = 'Signup failed. Please try again.';
       });
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Signup failed',
-              style: TextStyle(color: Theme.of(context).colorScheme.onError),
-            ),
-            backgroundColor: Theme.of(context).colorScheme.error,
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      }
+      if (!mounted) return;
+      CustomSnackbar.show(context, message: 'Signup failed', isError: true);
     } finally {
       setState(() {
         _loading = false;
