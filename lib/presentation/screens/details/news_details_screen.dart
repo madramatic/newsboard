@@ -1,14 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import '../../../domain/entities/news.dart';
+import '../../providers/user_provider.dart';
 
-class NewsDetailsScreen extends StatelessWidget {
+class NewsDetailsScreen extends ConsumerWidget {
   final News news;
   const NewsDetailsScreen({super.key, required this.news});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final user = ref.watch(userStateProvider);
+    final uid = user?.id;
+    final savedArticlesAsync =
+        uid != null ? ref.watch(savedArticlesListProvider(uid)) : null;
+    final saveArticle = ref.read(saveArticleProvider);
+    final removeSavedArticle = ref.read(removeSavedArticleProvider);
+    final loadingMap = ref.watch(articleSaveLoadingProvider);
+    final isLoading = loadingMap[news.articleId] == true;
+
     DateTime? publishedAt;
     try {
       publishedAt = DateTime.parse(news.pubDate);
@@ -16,6 +27,12 @@ class NewsDetailsScreen extends StatelessWidget {
       publishedAt = null;
     }
     final timeAgo = publishedAt != null ? timeago.format(publishedAt) : '';
+
+    bool isSaved = false;
+    if (savedArticlesAsync != null && savedArticlesAsync is AsyncData) {
+      isSaved =
+          savedArticlesAsync.value!.any((a) => a.articleId == news.articleId);
+    }
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -95,8 +112,69 @@ class NewsDetailsScreen extends StatelessWidget {
                                   CircleAvatar(
                                     backgroundColor: theme.colorScheme.surface
                                         .withAlpha((0.85 * 255).toInt()),
-                                    child: Icon(Icons.bookmark_border,
-                                        color: theme.colorScheme.onSurface),
+                                    child: isLoading
+                                        ? SizedBox(
+                                            width: 24,
+                                            height: 24,
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 2,
+                                              valueColor:
+                                                  AlwaysStoppedAnimation(
+                                                theme.colorScheme.primary,
+                                              ),
+                                            ),
+                                          )
+                                        : IconButton(
+                                            icon: isSaved
+                                                ? Image.asset(
+                                                    'assets/icons/save-fill.png',
+                                                    color: theme
+                                                        .colorScheme.primary,
+                                                    width: 24,
+                                                    height: 24,
+                                                  )
+                                                : Image.asset(
+                                                    'assets/icons/save.png',
+                                                    color:
+                                                        theme.iconTheme.color,
+                                                    width: 24,
+                                                    height: 24,
+                                                  ),
+                                            tooltip: isSaved
+                                                ? 'Remove from Saved'
+                                                : 'Save Article',
+                                            onPressed: uid == null
+                                                ? null
+                                                : () async {
+                                                    final loadingNotifier =
+                                                        ref.read(
+                                                            articleSaveLoadingProvider
+                                                                .notifier);
+                                                    loadingNotifier.state = {
+                                                      ...loadingNotifier.state,
+                                                      news.articleId: true,
+                                                    };
+                                                    if (isSaved) {
+                                                      await removeSavedArticle
+                                                          .call(
+                                                              uid: uid,
+                                                              articleId: news
+                                                                  .articleId);
+                                                    } else {
+                                                      await saveArticle.call(
+                                                          uid: uid,
+                                                          article: news);
+                                                    }
+                                                    await ref.refresh(
+                                                        savedArticlesListProvider(
+                                                                uid)
+                                                            .future);
+                                                    loadingNotifier.state = {
+                                                      ...loadingNotifier.state,
+                                                      news.articleId: false,
+                                                    };
+                                                  },
+                                          ),
                                   ),
                                   const SizedBox(width: 12),
                                   CircleAvatar(
