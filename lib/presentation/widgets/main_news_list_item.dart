@@ -5,6 +5,9 @@ class MainNewsListItem extends StatelessWidget {
   final String headline;
   final String summary;
   final VoidCallback? onTap;
+  final bool isSaved;
+  final VoidCallback? onSave;
+  final VoidCallback? onRemove;
 
   const MainNewsListItem({
     super.key,
@@ -12,6 +15,9 @@ class MainNewsListItem extends StatelessWidget {
     required this.headline,
     required this.summary,
     this.onTap,
+    this.isSaved = false,
+    this.onSave,
+    this.onRemove,
   });
 
   String? getValidImageUrl(String? url) {
@@ -27,7 +33,7 @@ class MainNewsListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final validImageUrl = getValidImageUrl(imageUrl);
-
+    final theme = Theme.of(context);
     return GestureDetector(
       onTap: onTap,
       child: Column(
@@ -44,13 +50,37 @@ class MainNewsListItem extends StatelessWidget {
             ),
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-            child: Text(
-              headline,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontFamily: 'PlayfairDisplay',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Text(
+                    headline,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontFamily: 'PlayfairDisplay',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
                   ),
+                ),
+                IconButton(
+                  icon: isSaved
+                      ? Image.asset(
+                          'assets/icons/save-fill.png',
+                          color: theme.colorScheme.primary,
+                          width: 20,
+                          height: 20,
+                        )
+                      : Image.asset(
+                          'assets/icons/save.png',
+                          color: theme.iconTheme.color,
+                          width: 20,
+                          height: 20,
+                        ),
+                  onPressed: isSaved ? onRemove : onSave,
+                  tooltip: isSaved ? 'Remove from Saved' : 'Save Article',
+                ),
+              ],
             ),
           ),
           Padding(
@@ -59,10 +89,10 @@ class MainNewsListItem extends StatelessWidget {
               summary,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Colors.grey[700],
-                    fontSize: 15,
-                  ),
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: Colors.grey[700],
+                fontSize: 15,
+              ),
             ),
           ),
         ],

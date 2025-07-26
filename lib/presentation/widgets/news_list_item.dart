@@ -1,11 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/entities/news.dart';
 import 'package:intl/intl.dart';
+import '../providers/user_provider.dart';
 
-class NewsListItem extends StatelessWidget {
+class NewsListItem extends ConsumerWidget {
   final News news;
   final VoidCallback? onTap;
-  const NewsListItem({super.key, required this.news, this.onTap});
+  final bool isSaved;
+  final VoidCallback? onSave;
+  final VoidCallback? onRemove;
+  const NewsListItem({
+    super.key,
+    required this.news,
+    this.onTap,
+    this.isSaved = false,
+    this.onSave,
+    this.onRemove,
+  });
 
   String _getTimeAgo(String pubDate) {
     // Parse pubDate and return time ago string
@@ -36,8 +48,11 @@ class NewsListItem extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final loadingMap = ref.watch(articleSaveLoadingProvider);
+    final isLoading = loadingMap[news.articleId] == true;
+
     return InkWell(
       onTap: onTap,
       child: Padding(
@@ -74,14 +89,54 @@ class NewsListItem extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          news.title,
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            fontFamily: 'PlayfairDisplay',
-                            fontWeight: FontWeight.bold,
-                          ),
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                news.title,
+                                style: theme.textTheme.titleMedium?.copyWith(
+                                  fontFamily: 'PlayfairDisplay',
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                maxLines: 3,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            isLoading
+                                ? IconButton(
+                                    icon: SizedBox(
+                                      width: 20,
+                                      height: 20,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        valueColor: AlwaysStoppedAnimation(
+                                          theme.colorScheme.primary,
+                                        ),
+                                      ),
+                                    ),
+                                    onPressed: null,
+                                  )
+                                : IconButton(
+                                    icon: isSaved
+                                        ? Image.asset(
+                                            'assets/icons/save-fill.png',
+                                            color: theme.colorScheme.primary,
+                                            width: 20,
+                                            height: 20,
+                                          )
+                                        : Image.asset(
+                                            'assets/icons/save.png',
+                                            color: theme.iconTheme.color,
+                                            width: 20,
+                                            height: 20,
+                                          ),
+                                    onPressed: isSaved ? onRemove : onSave,
+                                    tooltip: isSaved
+                                        ? 'Remove from Saved'
+                                        : 'Save Article',
+                                  ),
+                          ],
                         ),
                         const SizedBox(height: 8),
                         Row(
