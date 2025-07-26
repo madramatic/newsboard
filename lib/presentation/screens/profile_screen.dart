@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../providers/user_provider.dart';
 import '../providers/auth_provider.dart';
 import '../widgets/custom_button.dart';
+import '../widgets/custom_snackbar.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -104,18 +105,8 @@ class ProfileScreen extends ConsumerWidget {
               onPressed: () async {
                 await ref.read(signOutProvider).call();
                 if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        'Logged out successfully',
-                        style: TextStyle(
-                          color: theme.colorScheme.onSurface,
-                        ),
-                      ),
-                      backgroundColor: theme.colorScheme.surface,
-                      behavior: SnackBarBehavior.floating,
-                    ),
-                  );
+                  CustomSnackbar.show(context,
+                      message: 'Logged out successfully');
                   context.go('/login');
                 }
               },

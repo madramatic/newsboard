@@ -6,6 +6,7 @@ import 'package:newsboard/presentation/providers/auth_provider.dart';
 import 'package:newsboard/presentation/providers/user_provider.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_text_form_field.dart';
+import '../widgets/custom_snackbar.dart';
 import 'package:go_router/go_router.dart';
 
 class InfoScreen extends ConsumerStatefulWidget {
@@ -21,6 +22,32 @@ class _InfoScreenState extends ConsumerState<InfoScreen> {
   String _lastName = '';
   bool _loading = false;
   String? _error;
+  bool _signupSnackShown = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_signupSnackShown) {
+      final args = ModalRoute.of(context)?.settings.arguments;
+      if (args == 'signup_success') {
+        final theme = Theme.of(context);
+        final isDark = theme.brightness == Brightness.dark;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Sign up successful',
+                style: TextStyle(color: isDark ? Colors.black : Colors.white),
+              ),
+              backgroundColor: isDark ? Colors.white : Colors.black,
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        });
+        _signupSnackShown = true;
+      }
+    }
+  }
 
   void _continue() async {
     if (!_formKey.currentState!.validate()) return;
@@ -34,6 +61,7 @@ class _InfoScreenState extends ConsumerState<InfoScreen> {
         _error = 'User not found.';
         _loading = false;
       });
+      CustomSnackbar.show(context, message: 'User not found', isError: true);
       return;
     }
     try {
@@ -42,15 +70,25 @@ class _InfoScreenState extends ConsumerState<InfoScreen> {
         lastName: _lastName,
       );
       await ref.read(saveUserProvider).call(user: updatedUser);
+      if (!mounted) return;
       ref.read(userStateProvider.notifier).state = updatedUser;
       await ref.refresh(currentUserProfileProvider.future);
-      if (mounted) {
-        context.go('/');
-      }
+      if (!mounted) return;
+      final name = (updatedUser.firstName != null ||
+              updatedUser.lastName != null)
+          ? 'Welcome ${updatedUser.firstName ?? ''}${updatedUser.lastName != null ? ' ${updatedUser.lastName}' : ''}!'
+          : 'Welcome!';
+      CustomSnackbar.show(context, message: name);
+      await Future.delayed(const Duration(milliseconds: 500));
+      if (!mounted) return;
+      context.go('/');
     } catch (e) {
       setState(() {
         _error = 'Failed to save profile. Please try again.';
       });
+      if (!mounted) return;
+      CustomSnackbar.show(context,
+          message: 'Failed to save profile', isError: true);
     } finally {
       setState(() {
         _loading = false;
