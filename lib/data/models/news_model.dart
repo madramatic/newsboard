@@ -50,4 +50,29 @@ class NewsModel extends News {
       duplicate: json['duplicate'] ?? false,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'article_id': articleId,
+      'title': title,
+      'link': link,
+      'keywords': keywords,
+      'creator': creator,
+      'description': description,
+      'content': content,
+      'pubDate': pubDate,
+      'pubDateTZ': pubDateTZ,
+      'image_url': imageUrl,
+      'video_url': videoUrl,
+      'source_id': sourceId,
+      'source_name': sourceName,
+      'source_priority': sourcePriority,
+      'source_url': sourceUrl,
+      'source_icon': sourceIcon,
+      'language': language,
+      'country': country,
+      'category': category,
+      'duplicate': duplicate,
+    };
+  }
 }
