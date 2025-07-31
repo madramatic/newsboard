@@ -36,10 +36,12 @@ class SavedScreen extends ConsumerWidget {
           if (articles.isEmpty) {
             return const Center(child: Text('No saved articles.'));
           }
+          final sortedArticles = [...articles]..sort((a, b) =>
+              DateTime.parse(b.pubDate).compareTo(DateTime.parse(a.pubDate)));
           return ListView.builder(
-            itemCount: articles.length,
+            itemCount: sortedArticles.length,
             itemBuilder: (context, index) {
-              final news = articles[index];
+              final news = sortedArticles[index];
               return NewsListItem(
                 news: news,
                 isSaved: true,
