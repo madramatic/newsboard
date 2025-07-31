@@ -30,12 +30,14 @@ class CustomButton extends StatelessWidget {
           onTap: loading ? null : onPressed,
           child: Center(
             child: loading
-                ? const SizedBox(
+                ? SizedBox(
                     width: 22,
                     height: 22,
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        isDark ? Colors.black : Colors.white,
+                      ),
                     ),
                   )
                 : Text(
