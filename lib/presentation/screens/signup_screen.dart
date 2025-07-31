@@ -6,6 +6,7 @@ import '../providers/user_provider.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_snackbar.dart';
 import '../widgets/custom_text_form_field.dart';
+import '../widgets/newsboard_icons_row.dart';
 
 class SignupScreen extends ConsumerStatefulWidget {
   const SignupScreen({super.key});
@@ -73,54 +74,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   ),
                 ),
                 const SizedBox(height: 24),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      Theme.of(context).brightness == Brightness.dark
-                          ? 'assets/icons/home-fill.png'
-                          : 'assets/icons/home-fill.png',
-                      width: 28,
-                      height: 28,
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? Colors.white
-                          : null,
-                    ),
-                    const SizedBox(width: 60),
-                    Image.asset(
-                      Theme.of(context).brightness == Brightness.dark
-                          ? 'assets/icons/chat-fill.png'
-                          : 'assets/icons/chat-fill.png',
-                      width: 28,
-                      height: 28,
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? Colors.white
-                          : null,
-                    ),
-                    const SizedBox(width: 60),
-                    Image.asset(
-                      Theme.of(context).brightness == Brightness.dark
-                          ? 'assets/icons/save-fill.png'
-                          : 'assets/icons/save-fill.png',
-                      width: 28,
-                      height: 28,
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? Colors.white
-                          : null,
-                    ),
-                    const SizedBox(width: 60),
-                    Image.asset(
-                      Theme.of(context).brightness == Brightness.dark
-                          ? 'assets/icons/user-fill.png'
-                          : 'assets/icons/user-fill.png',
-                      width: 28,
-                      height: 28,
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? Colors.white
-                          : null,
-                    ),
-                  ],
-                ),
+                const NewsboardIconsRow(),
                 const SizedBox(height: 60),
                 Text('Sign up',
                     style: theme.textTheme.headlineLarge!.copyWith(
